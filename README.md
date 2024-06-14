@@ -7,23 +7,6 @@ Azure Data Pipelines Repo
 
 ![Test snapshot](test.png)
 
-
-SQL example
-
-```sql
-CREATE EXTERNAL TABLE [dbo].[NYC_Payroll_Summary](
-[FiscalYear] [int] NULL,
-[AgencyName] [varchar](50) NULL,
-[TotalPaid] [float] NULL
-)
-WITH (
-LOCATION = '/',
-DATA_SOURCE = [mydlsfs20230413_mydls20230413_dfs_core_windows_net],
-FILE_FORMAT = [SynapseDelimitedTextFormat]
-)
-GO
-```
-
 ## 2. Create an Azure Data Factory Resource
 
 ## 3. Create a SQL Database
@@ -51,16 +34,16 @@ GO
 ```
 
 ```sql
-CREATE EXTERNAL TABLE [dbo].[NYC_Payroll_Summary](
-[FiscalYear] [int] NULL,
-[AgencyName] [varchar](50) NULL,
-[TotalPaid] [float] NULL
-)
-WITH (
-LOCATION = '/dirstaging',
-DATA_SOURCE = [adlsnycpayroll-octavian-p_adlsnycpayrolloctavianp_dfs_core_windows_net],
-FILE_FORMAT = [SynapseDelimitedTextFormat]
-)
+CREATE EXTERNAL TABLE dbo.NYC_Payroll_Summary (
+	[FiscalYear] [int] NULL,
+    [AgencyName] [varchar](50) NULL,
+    [TotalPaid] [float] NULL
+	)
+	WITH (
+	LOCATION = 'dirstaging/nycpayroll_2021.csv',
+	DATA_SOURCE = [adlsnycpayroll-octavian-p_adlsnycpayrolloctavianp_dfs_core_windows_net],
+	FILE_FORMAT = [SynapseDelimitedTextFormat]
+	)
 GO
 ```
 
@@ -197,10 +180,9 @@ dataset for NYC_Payroll_Summary
 
 ## 5. Snapshots
 📝Capture screenshots of datasets in Data Factory
-![alt text](image-5.png)
+![alt text](image-14.png)
 
 📝Save configs of datasets from Data Factory
-
 
 # Step 4: Create Data Flows
 
@@ -217,6 +199,8 @@ Repeat the same process to add data flow to load data for each file in Azure Dat
 ## 2. Snapshots
 
 📝Capture screenshots of dataflows in Data Factory
+![alt text](image-6.png)
+![alt text](image-7.png)
 
 📝Save configs of dataflows from Data Factory
 
@@ -249,13 +233,13 @@ In Settings, tick Clear the folder
 
 
 📝Capture screenshot of aggregate dataflow in Data Factory
-
+![alt text](image-8.png)
 
 📝Save config of aggregate dataflow from Data Factory
 
 
 
-Step 6: Pipeline Creation
+# Step 6: Pipeline Creation
 Now, that you have the data flows created it is time to bring the pieces together and orchestrate the flow.
 
 We will create a pipeline to load data from Azure DataLake Gen2 storage in SQL db for individual datasets, perform aggregations and store the summary results back into SQL db destination table and datalake staging storage directory which will be consumed by Synapse Analytics via CETAS.
@@ -264,26 +248,18 @@ Create a new pipeline
 Include dataflows for Agency, Employee and Title to be parallel
 Add dataflows for payroll 2020 and payroll 2021. These should run only after the initial 3 dataflows have completed
 After payroll 2020 and payroll 2021 dataflows have completed, dataflow for aggregation should be started.
-Refer to the below screenshot. Your final pipeline should look like this
 
-A sample Pipeline flow
-A sample Pipeline flow
+![alt text](image-9.png)
 
 
-
-
-
-
-Step 7: Trigger and Monitor Pipeline
+# Step 7: Trigger and Monitor Pipeline
 
 Select Add trigger option from pipeline view in the toolbar
 Choose trigger now to initiate pipeline run
 You can go to monitor tab and check the Pipeline Runs
 Each dataflow will have an entry in Activity runs list
 
-
-
-Step 8: Verify Pipeline run artifacts
+# Step 8: Verify Pipeline run artifacts
 
 Query data in SQL DB summary table (destination table). This is one of the sinks defined in the pipeline.
 Check the dirstaging directory in Datalake if files got created. This is one of the sinks defined in the pipeline
@@ -292,13 +268,19 @@ Query data in Synapse external table that points to the dirstaging directory in 
 
 
 📝Capture screenshot of pipeline resource from Datafactory
+![alt text](image-11.png)
 
 📝Save config of pipeline from Data Factory
 
+
 📝Capture screenshot of successful pipeline run. All activity runs and dataflow success indicators should be visible
+![alt text](image-10.png)
 
 📝Capture screenshot of query from SQL DB summary table
+![alt text](image-12.png)
 
 📝Capture screenshot of dirstaging directory listing in Datalake that shows files saved after pipeline runs
+![alt text](image-13.png)
 
 📝Capture screenshot of query from Synapse summary external table
+![alt text](image-15.png)
