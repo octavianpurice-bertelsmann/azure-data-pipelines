@@ -10,36 +10,10 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_NYC_Payroll_Data_2021",
-						"type": "DatasetReference"
-					},
-					"name": "source2"
 				}
 			],
 			"sinks": [],
-			"transformations": [
-				{
-					"name": "union1"
-				},
-				{
-					"name": "select1"
-				},
-				{
-					"name": "select2"
-				},
-				{
-					"name": "filter1"
-				},
-				{
-					"name": "TotalPaid"
-				},
-				{
-					"name": "aggregate1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          FiscalYear as integer,",
@@ -62,86 +36,10 @@
 				"          TotalOTPaid as double,",
 				"          TotalOtherPay as double",
 				"     ),",
-				"     allowSchemaDrift: true,",
+				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
-				"source(output(",
-				"          FiscalYear as integer,",
-				"          PayrollNumber as integer,",
-				"          AgencyCode as string,",
-				"          AgencyName as string,",
-				"          EmployeeID as string,",
-				"          LastName as string,",
-				"          FirstName as string,",
-				"          AgencyStartDate as date,",
-				"          WorkLocationBorough as string,",
-				"          TitleCode as string,",
-				"          TitleDescription as string,",
-				"          LeaveStatusasofJune30 as string,",
-				"          BaseSalary as double,",
-				"          PayBasis as string,",
-				"          RegularHours as double,",
-				"          RegularGrossPaid as double,",
-				"          OTHours as double,",
-				"          TotalOTPaid as double,",
-				"          TotalOtherPay as double",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source2",
-				"select1, select2 union(byName: true)~> union1",
-				"source1 select(mapColumn(",
-				"          FiscalYear,",
-				"          PayrollNumber,",
-				"          AgencyID,",
-				"          AgencyName,",
-				"          EmployeeID,",
-				"          LastName,",
-				"          FirstName,",
-				"          AgencyStartDate,",
-				"          WorkLocationBorough,",
-				"          TitleCode,",
-				"          TitleDescription,",
-				"          LeaveStatusasofJune30,",
-				"          BaseSalary,",
-				"          PayBasis,",
-				"          RegularHours,",
-				"          RegularGrossPaid,",
-				"          OTHours,",
-				"          TotalOTPaid,",
-				"          TotalOtherPay",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"source2 select(mapColumn(",
-				"          FiscalYear,",
-				"          PayrollNumber,",
-				"          AgencyID = AgencyCode,",
-				"          AgencyName,",
-				"          EmployeeID,",
-				"          LastName,",
-				"          FirstName,",
-				"          AgencyStartDate,",
-				"          WorkLocationBorough,",
-				"          TitleCode,",
-				"          TitleDescription,",
-				"          LeaveStatusasofJune30,",
-				"          BaseSalary,",
-				"          PayBasis,",
-				"          RegularHours,",
-				"          RegularGrossPaid,",
-				"          OTHours,",
-				"          TotalOTPaid,",
-				"          TotalOtherPay",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select2",
-				"union1 filter(toInteger(FiscalYear) >= $dataflow_param_fiscalyear) ~> filter1",
-				"filter1 derive(TotalPaid = RegularGrossPaid + TotalOTPaid+TotalOtherPay) ~> TotalPaid",
-				"TotalPaid aggregate(groupBy(AgencyName,",
-				"          FiscalYear)) ~> aggregate1"
+				"     format: 'table') ~> source1"
 			]
 		}
 	}
