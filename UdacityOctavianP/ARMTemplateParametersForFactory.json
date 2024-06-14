@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "UdacityOctavianP"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics1_password": {
+			"value": ""
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_server": {
+			"value": "udacity-ondemand.sql.azuresynapse.net"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_database": {
+			"value": "udacity"
+		},
+		"AzureSynapseAnalytics1_properties_typeProperties_userName": {
+			"value": "sqladminuser"
+		}
+	}
+}
