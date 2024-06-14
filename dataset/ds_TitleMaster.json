@@ -1,5 +1,5 @@
 {
-	"name": "dsd_TitleMaster",
+	"name": "ds_TitleMaster",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureBlobStorage1",
