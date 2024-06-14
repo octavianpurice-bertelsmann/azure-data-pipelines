@@ -1,9 +1,9 @@
 # azure-data-pipelines
 Azure Data Pipelines Repo
 
-#Step 1: Prepare the Data Infrastructure
+# Step 1: Prepare the Data Infrastructure
 
-##1. Create the Data Lake and upload data
+## 1. Create the Data Lake and upload data
 
 ![Test snapshot](test.png)
 
@@ -21,18 +21,18 @@ FILE_FORMAT = [SynapseDelimitedTextFormat]
 GO
 ```
 
-##2. Create an Azure Data Factory Resource
+## 2. Create an Azure Data Factory Resource
 
-##3. Create a SQL Database
+## 3. Create a SQL Database
 
-##4. Create a Synapse Analytics workspace, or use one you already have created.
+## 4. Create a Synapse Analytics workspace, or use one you already have created.
 
-##5. Create summary data external table in Synapse Analytics workspace
+## 5. Create summary data external table in Synapse Analytics workspace
 
-##6. Create master data tables and payroll transaction tables in SQL DB
+## 6. Create master data tables and payroll transaction tables in SQL DB
 
 
-##7. Screenshot of the below
+## 7. Screenshot of the below
 
 DataLakeGen2 that shows files are uploaded
 
@@ -41,59 +41,59 @@ Above 5 tables created in SQL db
 External table created in Synapse
 
 
-#Step 2: Create Linked Services
+# Step 2: Create Linked Services
 
-##1.Create a Linked Service for Azure Data Lake
+## 1.Create a Linked Service for Azure Data Lake
 
 In Azure Data Factory, create a linked service to the data lake that contains the data files
 
 From the data stores, select Azure Data Lake Gen 2
 Test the connection
 
-##2. Create a Linked Service to SQL Database that has the current (2021) data
+## 2. Create a Linked Service to SQL Database that has the current (2021) data
 Test the connection
 
 
 If you get a connection error, remember to add the IP address to the firewall settings in SQL DB in the Azure Portal
 
 
-##3.
+## 3.
 📝Capture screenshot of Linked Services page after successful creation
 
 📝Save configs of Linked Services after creation
 
 
 
-#Step 3: Create Datasets in Azure Data Factory
+# Step 3: Create Datasets in Azure Data Factory
 
-##1.Create the datasets for the 2021 Payroll file on Azure Data Lake Gen2
+## 1.Create the datasets for the 2021 Payroll file on Azure Data Lake Gen2
 
 Select DelimitedText
 Set the path to the nycpayroll_2021.csv in the Data Lake
 Preview the data to make sure it is correctly parsed
 
-##2. Repeat the same process to create datasets for the rest of the data files in the Data Lake
+## 2. Repeat the same process to create datasets for the rest of the data files in the Data Lake
 
 EmpMaster.csv
 TitleMaster.csv
 AgencyMaster.csv
 Remember to publish all the datasets
 
-##3. Create the dataset for all the data tables in SQL DB
+## 3. Create the dataset for all the data tables in SQL DB
 
-##4. Create the datasets for destination (target) table in Synapse Analytics
+## 4. Create the datasets for destination (target) table in Synapse Analytics
 dataset for NYC_Payroll_Summary
 
-##5. Snapshots
+## 5. Snapshots
 📝Capture screenshots of datasets in Data Factory
 
 
 📝Save configs of datasets from Data Factory
 
 
-#Step 4: Create Data Flows
+# Step 4: Create Data Flows
 
-##1. Create a new data flow
+## 1. Create a new data flow
 In Azure Data Factory, create data flow to load 2020 Payroll data from Azure DataLake Gen2 storage to SQL db table created earlier
 
 Create a new data flow
@@ -103,7 +103,7 @@ Select the sink dataset as 2020 payroll table created in SQL db
 Repeat the same process to add data flow to load data for each file in Azure DataLake to the corresponding SQL DB tables.
 
 
-##2. Snapshots
+## 2. Snapshots
 
 📝Capture screenshots of dataflows in Data Factory
 
@@ -111,7 +111,7 @@ Repeat the same process to add data flow to load data for each file in Azure Dat
 
 
 
-#Step 5: Data Aggregation and Parameterization
+# Step 5: Data Aggregation and Parameterization
 
 In this step, you'll extract the 2021 year data and historical data, merge, aggregate and store it in DataLake staging area which will be used by Synapse Analytics external table. The aggregation will be on Agency Name, Fiscal Year and TotalPaid.
 
