@@ -1,0 +1,9 @@
+{
+	"name": "UdacityOctavianP",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "8a62f0e3-ffcb-4da1-be35-514eaca626f1",
+		"tenantId": "f958e84a-92b8-439f-a62d-4f45996b6d07"
+	}
+}
