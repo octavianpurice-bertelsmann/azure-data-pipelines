@@ -7,6 +7,9 @@ Azure Data Pipelines Repo
 
 ![Test snapshot](test.png)
 
+
+SQL example
+
 ```sql
 CREATE EXTERNAL TABLE [dbo].[NYC_Payroll_Summary](
 [FiscalYear] [int] NULL,
@@ -29,17 +32,124 @@ GO
 
 ## 5. Create summary data external table in Synapse Analytics workspace
 
+```sql
+IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') 
+	CREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] 
+	WITH ( FORMAT_TYPE = DELIMITEDTEXT ,
+	       FORMAT_OPTIONS (
+			 FIELD_TERMINATOR = ',',
+			 USE_TYPE_DEFAULT = FALSE
+			))
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'adlsnycpayroll-octavian-p_adlsnycpayrolloctavianp_dfs_core_windows_net') 
+	CREATE EXTERNAL DATA SOURCE [adlsnycpayroll-octavian-p_adlsnycpayrolloctavianp_dfs_core_windows_net] 
+	WITH (
+		LOCATION = 'abfss://adlsnycpayroll-octavian-p@adlsnycpayrolloctavianp.dfs.core.windows.net' 
+	)
+GO
+```
+
+```sql
+CREATE EXTERNAL TABLE [dbo].[NYC_Payroll_Summary](
+[FiscalYear] [int] NULL,
+[AgencyName] [varchar](50) NULL,
+[TotalPaid] [float] NULL
+)
+WITH (
+LOCATION = '/dirstaging',
+DATA_SOURCE = [adlsnycpayroll-octavian-p_adlsnycpayrolloctavianp_dfs_core_windows_net],
+FILE_FORMAT = [SynapseDelimitedTextFormat]
+)
+GO
+```
+
+
+
+
 ## 6. Create master data tables and payroll transaction tables in SQL DB
+```sql
+CREATE TABLE [dbo].[NYC_Payroll_EMP_MD](
+[EmployeeID] [varchar](10) NULL,
+[LastName] [varchar](20) NULL,
+[FirstName] [varchar](20) NULL
+) 
+GO
+CREATE TABLE [dbo].[NYC_Payroll_TITLE_MD](
+[TitleCode] [varchar](10) NULL,
+[TitleDescription] [varchar](100) NULL
+)
+GO
+CREATE TABLE [dbo].[NYC_Payroll_AGENCY_MD](
+    [AgencyID] [varchar](10) NULL,
+    [AgencyName] [varchar](50) NULL
+) 
+GO
+CREATE TABLE [dbo].[NYC_Payroll_Data_2020](
+    [FiscalYear] [int] NULL,
+    [PayrollNumber] [int] NULL,
+    [AgencyID] [varchar](10) NULL,
+    [AgencyName] [varchar](50) NULL,
+    [EmployeeID] [varchar](10) NULL,
+    [LastName] [varchar](20) NULL,
+    [FirstName] [varchar](20) NULL,
+    [AgencyStartDate] [date] NULL,
+    [WorkLocationBorough] [varchar](50) NULL,
+    [TitleCode] [varchar](10) NULL,
+    [TitleDescription] [varchar](100) NULL,
+    [LeaveStatusasofJune30] [varchar](50) NULL,
+    [BaseSalary] [float] NULL,
+    [PayBasis] [varchar](50) NULL,
+    [RegularHours] [float] NULL,
+    [RegularGrossPaid] [float] NULL,
+    [OTHours] [float] NULL,
+    [TotalOTPaid] [float] NULL,
+    [TotalOtherPay] [float] NULL
+) 
+GO
+
+CREATE TABLE [dbo].[NYC_Payroll_Data_2021](
+    [FiscalYear] [int] NULL,
+    [PayrollNumber] [int] NULL,
+    [AgencyCode] [varchar](10) NULL,
+    [AgencyName] [varchar](50) NULL,
+    [EmployeeID] [varchar](10) NULL,
+    [LastName] [varchar](20) NULL,
+    [FirstName] [varchar](20) NULL,
+    [AgencyStartDate] [date] NULL,
+    [WorkLocationBorough] [varchar](50) NULL,
+    [TitleCode] [varchar](10) NULL,
+    [TitleDescription] [varchar](100) NULL,
+    [LeaveStatusasofJune30] [varchar](50) NULL,
+    [BaseSalary] [float] NULL,
+    [PayBasis] [varchar](50) NULL,
+    [RegularHours] [float] NULL,
+    [RegularGrossPaid] [float] NULL,
+    [OTHours] [float] NULL,
+    [TotalOTPaid] [float] NULL,
+    [TotalOtherPay] [float] NULL
+) 
+GO
+CREATE TABLE [dbo].[NYC_Payroll_Summary](
+    [FiscalYear] [int] NULL,
+    [AgencyName] [varchar](50) NULL,
+    [TotalPaid] [float] NULL 
+)
+GO
+```
 
 
 ## 7. Screenshot of the below
 
 DataLakeGen2 that shows files are uploaded
+![alt text](image.png)
 
 Above 5 tables created in SQL db
+![alt text](image-1.png)
 
 External table created in Synapse
-
+![alt text](image-3.png)
+![alt text](image-2.png)
 
 # Step 2: Create Linked Services
 
@@ -59,6 +169,7 @@ If you get a connection error, remember to add the IP address to the firewall se
 
 ## 3.
 📝Capture screenshot of Linked Services page after successful creation
+![alt text](image-4.png)
 
 📝Save configs of Linked Services after creation
 
@@ -86,7 +197,7 @@ dataset for NYC_Payroll_Summary
 
 ## 5. Snapshots
 📝Capture screenshots of datasets in Data Factory
-
+![alt text](image-5.png)
 
 📝Save configs of datasets from Data Factory
 
